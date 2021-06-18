@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 DST="$HOME/.cache/opam-grep"
 PACKAGES="$DST/packages"
 
@@ -10,20 +12,8 @@ sync() {
 
 check() {
   if test ! -e "$DST/$1"; then
-    opam source --dir "$DST/$1" "$1" > /dev/null
+    opam source --dir "$DST/$1" "$1" > /dev/null || true
   fi
-}
-
-update() {
-  sync
-
-  MSG='Downloading packages: '
-  for pkg in $(cat "$PACKAGES"); do
-    spin
-    check "$pkg"
-  done
-
-  echo -e '\033[2K\rUpdate complete.'
 }
 
 SPIN='/'
@@ -40,7 +30,7 @@ spin() {
 }
 
 search() {
-  test -e "$PACKAGES" || sync
+  sync
 
   for pkg in $(cat "$PACKAGES"); do
     spin
@@ -54,36 +44,31 @@ search() {
 }
 
 case "$1" in
-update)
+--help)
   if test "$#" -gt 2; then
     echo "Too many arguments."
     exit 1
   fi
-  update
+  echo "Usage:"
+  echo "opam-grep --help"
+  echo "opam-grep --version"
+  echo "opam-grep <regexp>"
   ;;
-prune)
+--version)
   if test "$#" -gt 2; then
     echo "Too many arguments."
     exit 1
   fi
-  # XXX Intention is to remove directories no longer listed in $DST/packages
-  echo "Not yet implemented."
-  exit 1
-  ;;
-grep)
-  if test "$#" -lt 2; then
-    echo "Not enough arguments."
-    exit 1
-  elif test "$#" -gt 2; then
-    echo "Too many arguments."
-    exit 1
-  fi
-  search $2
+  echo "0.1.0"
   ;;
 *)
-  echo "Usage:"
-  echo "  - $0 update"
-  echo "  - $0 prune"
-  echo "  - $0 grep <regexp>"
+  if test "$#" -lt 1; then
+    echo "Not enough arguments."
+    exit 1
+  elif test "$#" -gt 1; then
+    echo "Too many arguments."
+    exit 1
+  fi
+  search $1
   ;;
 esac
