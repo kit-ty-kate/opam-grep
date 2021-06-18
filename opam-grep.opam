@@ -1,0 +1,10 @@
+opam-version: "2.0"
+synopsis: "Script that greps anything in the sources of every opam packages"
+license: "MIT"
+maintainer: "Kate <kit.ty.kate@disroot.org>"
+authors: "Kate <kit.ty.kate@disroot.org>"
+homepage: "https://github.com/kit-ty-kate/opam-grep"
+dev-repo: "git://github.com/kit-ty-kate/opam-grep.git"
+bug-reports: "https://github.com/kit-ty-kate/opam-grep/issues"
+flags: plugin
+available: os = "linux" | os-family = "bsd"

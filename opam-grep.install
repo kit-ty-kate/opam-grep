@@ -1,0 +1,3 @@
+bin: [
+  "opam-grep.sh" {"opam-grep"}
+]
