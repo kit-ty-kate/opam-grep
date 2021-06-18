@@ -57,21 +57,35 @@ search() {
 
 case "$1" in
 --help)
-  if test "$#" -gt 2; then
+  if test "$#" -gt 1; then
     echo "Too many arguments."
     exit 1
   fi
   echo "Usage:"
-  echo "opam-grep --help"
-  echo "opam-grep --version"
-  echo "opam-grep <regexp>"
+  echo "  - $0 --help"
+  echo "  - $0 --version"
+  echo "  - $0 [--regexp] <regexp>"
   ;;
 --version)
-  if test "$#" -gt 2; then
+  if test "$#" -gt 1; then
     echo "Too many arguments."
     exit 1
   fi
   echo "0.1.0"
+  ;;
+--regexp)
+  if test "$#" -lt 2; then
+    echo "Not enough arguments."
+    exit 1
+  elif test "$#" -gt 2; then
+    echo "Too many arguments."
+    exit 1
+  fi
+  search $2
+  ;;
+--*)
+  echo "Option '$1' unknown."
+  exit 1
   ;;
 *)
   if test "$#" -lt 1; then
