@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DST="$HOME/.opam-grep"
+DST="$HOME/.cache/opam-grep"
 PACKAGES="$DST/packages"
 
 sync() {
@@ -9,7 +9,7 @@ sync() {
 }
 
 check() {
-  if [ ! -e "$DST/$1" ]; then
+  if test ! -e "$DST/$1"; then
     opam source --dir "$DST/$1" "$1" > /dev/null
   fi
 }
