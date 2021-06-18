@@ -10,9 +10,21 @@ sync() {
   opam show -f package $(opam list -A -s --color=never) > "$PACKAGES"
 }
 
+atexit() {
+  if test -z "$PKG" -o -z "$DST"; then
+    echo "Something went really wrong. Please report."
+    exit 1
+  fi
+  rm -rf "$DST/$PKG"
+  exit 1
+}
+
 check() {
-  if test ! -e "$DST/$1"; then
-    opam source --dir "$DST/$1" "$1" > /dev/null || true
+  PKG="$1" # Used for atexit
+  if test ! -e "$DST/$PKG"; then
+    trap atexit INT TERM
+    opam source --dir "$DST/$PKG" "$PKG" > /dev/null || true
+    trap - INT TERM
   fi
 }
 
