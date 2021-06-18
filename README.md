@@ -4,6 +4,7 @@ This is sometimes useful for OCaml library developers to know which portions of 
 
 ```
 Usage:
-  - ./opam-grep.sh setup
-  - ./opam-grep.sh grep <setup directory> <regexp>
+  - ./opam-grep.sh --help
+  - ./opam-grep.sh --version
+  - ./opam-grep.sh <regexp>
 ```
