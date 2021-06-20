@@ -81,7 +81,7 @@ case "$1" in
     echo "Too many arguments."
     exit 1
   fi
-  search $2
+  search "$2"
   ;;
 --*)
   echo "Option '$1' unknown."
@@ -95,6 +95,6 @@ case "$1" in
     echo "Too many arguments."
     exit 1
   fi
-  search $1
+  search "$1"
   ;;
 esac
