@@ -71,7 +71,7 @@ case "$1" in
     echo "Too many arguments."
     exit 1
   fi
-  echo "0.1.0"
+  echo "0.1.1"
   ;;
 --regexp)
   if test "$#" -lt 2; then

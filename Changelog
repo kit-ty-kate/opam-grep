@@ -1,3 +1,8 @@
+0.1.1 (20/06/2021)
+------------------
+
+- Fix missing shell quotes resulting in the impossibility of having regexp with spaces in them
+
 0.1.0 (18/06/2021)
 ------------------
 

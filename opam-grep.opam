@@ -1,5 +1,5 @@
 opam-version: "2.0"
-version: "0.1.0"
+version: "0.1.1"
 synopsis: "An opam plugin that greps anything in the sources of every opam packages"
 license: "MIT"
 maintainer: "Kate <kit.ty.kate@disroot.org>"
