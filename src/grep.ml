@@ -71,15 +71,21 @@ let check ~dst pkg =
   let pkgdir = dst // pkg in
   if not (result (Dir.exists pkgdir)) then begin
     result (Dir.delete ~recurse:true tmpdir);
-    let _ : (unit, _) result =
+    let outcome =
       (Cmd.v "opam" % "source" % "--dir" % Fpath.to_string tmpdir % pkg) |>
       Exec.run_out ~err:Exec.err_null |>
       Exec.out_null |>
       Exec.success
     in
-    result (Path.move tmpdir pkgdir)
-  end;
-  pkgdir
+    match outcome with
+    | Ok () ->
+        result (Path.move tmpdir pkgdir);
+        Some pkgdir
+    | Error _ ->
+        (* ignore errors, e.g. bad checksum, failed to fetch, etc. *)
+        None
+  end else
+    Some pkgdir
 
 let greps = [
   Cmd.v "rg"; (* ripgrep (fast, rust) *)
@@ -105,13 +111,15 @@ let search ~repos ~depends_on ~regexp =
   Progress.with_reporter (bar ~total:(List.length pkgs)) begin fun progress ->
     List.iter begin fun pkg ->
       progress 1;
-      let pkgdir = check ~dst pkg in
-      match Exec.run (grep % "--binary" % "-qsr" % "-e" % regexp % Fpath.to_string pkgdir) with
-      | Ok () ->
-          let pkg = List.hd (String.split_on_char '.' pkg) in
-          Progress.interject_with begin fun () ->
-            print_endline (pkg^" matches your regexp.")
-          end
-      | Error _ -> () (* Ignore errors here *)
+      match check ~dst pkg with
+      | None -> ()
+      | Some pkgdir ->
+        match Exec.run (grep % "--binary" % "-qsr" % "-e" % regexp % Fpath.to_string pkgdir) with
+        | Ok () ->
+            let pkg = List.hd (String.split_on_char '.' pkg) in
+            Progress.interject_with begin fun () ->
+              print_endline (pkg^" matches your regexp.")
+            end
+        | Error _ -> () (* Ignore errors here *)
     end pkgs;
   end
