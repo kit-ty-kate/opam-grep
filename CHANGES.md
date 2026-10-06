@@ -1,3 +1,8 @@
+unreleased
+----------
+
+- Fetch package sources in parallel, controlled by a new `-j`/`--jobs` option (default 8)
+
 v0.4.1 (28/07/2026)
 -------------------
 

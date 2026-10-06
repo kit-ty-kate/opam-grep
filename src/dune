@@ -5,7 +5,8 @@
   progress
   cmdliner
   fpath
-  bos))
+  bos
+  unix))
 
 (rule
  (target config.ml)
